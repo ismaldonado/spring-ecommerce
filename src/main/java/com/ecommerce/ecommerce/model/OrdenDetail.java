@@ -30,6 +30,10 @@ public class OrdenDetail {
 	@ManyToOne
 	private Product product;
 
+	public OrdenDetail() {
+
+	}
+
 	public OrdenDetail(Integer id, String name, double price, double ammount, Order order, Product product) {
 		this.id = id;
 		this.name = name;

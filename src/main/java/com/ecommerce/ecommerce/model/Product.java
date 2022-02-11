@@ -31,6 +31,9 @@ public class Product {
 	@ManyToOne
 	private User user;
 
+	public Product() {
+	}
+
 	public Product(Integer id, String name, String description, String picture, int ammount, double price, User user) {
 		this.id = id;
 		this.name = name;

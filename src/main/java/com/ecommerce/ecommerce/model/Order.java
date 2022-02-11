@@ -33,6 +33,10 @@ public class Order {
 	@OneToOne(mappedBy = "order")
 	private OrdenDetail detail;
 
+	public Order() {
+
+	}
+
 	public Order(Integer id, String number, Date creationDate, Date deliveryDate, double total, User user,
 			OrdenDetail detail) {
 		this.id = id;

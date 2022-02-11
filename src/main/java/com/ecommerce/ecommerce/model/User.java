@@ -40,6 +40,10 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private List<Order> order;
 
+	public User() {
+
+	}
+
 	public User(Integer id, String name, String username, String email, String password, String address, String phone,
 			String type, List<Product> products, List<Order> order) {
 		this.id = id;

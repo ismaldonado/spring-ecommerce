@@ -1,5 +1,7 @@
 package com.ecommerce.ecommerce.service;
 
+import java.util.List;
+
 import com.ecommerce.ecommerce.model.Product;
 
 public interface ProductService {
@@ -12,4 +14,5 @@ public interface ProductService {
 
 	public void delete(Integer id);
 
+	public List<Product> findAll();
 }

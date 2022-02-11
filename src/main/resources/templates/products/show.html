@@ -21,11 +21,10 @@
 
 <body>
 
-  <!-- Navigation -->
-   <div th:include="admin/template_admin.html::header">
-    </div>
+	<!-- Navigation -->
+	<div th:include="admin/template_admin.html::header"></div>
 
-<!-- Page Content -->
+	<!-- Page Content -->
 <div class="container">
 
 
@@ -39,7 +38,7 @@
     <li class="breadcrumb-item active">Ver Productos</li>
   </ol>
 
-  <a class="btn btn-primary" href="#" > Crear Producto</a>
+  <a class="btn btn-primary" th:href="@{/products/create}" > Crear Producto</a>
   <h2>Productos</h2>
   <table class="table">
     <thead>
@@ -53,13 +52,13 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td ></td>
-        <td ></td>
-        <td ></td>
-        <td ></td>
-        <td><a  class="btn btn-warning" href="">Editar</a> </td>
-        <td><a  class="btn btn-danger" href="">Eliminar</a> </td>
+      <tr th:each ="products:${products}">
+        <td th:text = "${products.name}"></td>
+        <td th:text = "${products.description}"></td>
+        <td th:text = "${products.ammount}"></td>
+        <td th:text = "${products.price}"></td>
+        <td><a  class="btn btn-warning" th:href="@{/products/update}">Editar</a> </td>
+        <td><a  class="btn btn-danger" th:href="@{products/delete}">Eliminar</a> </td>
       </tr>       
     </tbody>
   </table>
