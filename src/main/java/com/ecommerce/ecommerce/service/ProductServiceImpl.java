@@ -1,6 +1,7 @@
 package com.ecommerce.ecommerce.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,9 @@ public class ProductServiceImpl implements ProductService {
 		return this.productRepo.save(product);
 	}
 
-	@Override // he tenido que quitar el optional
-	public Product get(Integer id) {
-		return this.productRepo.getById(id);
+	@Override
+	public Optional<Product> get(Integer id) {
+		return this.productRepo.findById(id);
 	}
 
 	@Override
