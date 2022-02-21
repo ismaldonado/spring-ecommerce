@@ -3,8 +3,6 @@ package com.ecommerce.ecommerce.controller;
 import java.io.IOException;
 import java.util.Optional;
 
-import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +46,7 @@ public class ProductController {
 	}
 
 	@PostMapping("/save")
-	public String save(Product product, @RequestParam("img") MultipartFile file, HttpSession session)
-			throws IOException {
+	public String save(Product product, @RequestParam("img") MultipartFile file) throws IOException {
 		LOGGER.info("Este es el objeto Product {}", product);
 
 		// User u =
