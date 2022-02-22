@@ -24,6 +24,8 @@ public class OrdenDetail {
 	private double price;
 	@Column(name = "ammount")
 	private double ammount;
+	@Column(name = "total")
+	private double total;
 	@OneToOne
 	private Order order;
 

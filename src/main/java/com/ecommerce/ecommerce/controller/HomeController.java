@@ -1,5 +1,7 @@
 package com.ecommerce.ecommerce.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -11,7 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ecommerce.ecommerce.model.OrdenDetail;
+import com.ecommerce.ecommerce.model.Order;
 import com.ecommerce.ecommerce.model.Product;
 import com.ecommerce.ecommerce.service.ProductService;
 
@@ -24,12 +29,19 @@ public class HomeController {
 	// vable para imprimer cosas. no system
 	private final Logger log = LoggerFactory.getLogger(HomeController.class);
 
+	// para almacenar los distintos detalles de los elementos del pedido
+	private List<OrdenDetail> ordenDetail = new ArrayList<OrdenDetail>();
+
+	// almacena el pedido entero
+	Order order = new Order();
+
 	@GetMapping()
 	public String home(Model model) {
 		model.addAttribute("products", this.productService.findAll());
 		return "user/home";
 	}
 
+	// ver el detalle del producto
 	@GetMapping("producthome/{id}") // se define la terminación de la ruta y el parámetro de búsqueda del producto
 	public String productHome(@PathVariable Integer id, Model model) {
 		Product product = new Product();
@@ -41,7 +53,35 @@ public class HomeController {
 	}
 
 	@PostMapping("/cart")
-	public String addCart() {
+	public String addCart(@RequestParam Integer id, @RequestParam Integer ammount, Model model) {
+
+		// recupera producto con id (tipo producto añadido)
+		Optional<Product> optionalProduct = this.productService.get(id);
+		// se asigna a vble tipo product
+		Product product = new Product();
+		product = optionalProduct.get();
+		// se crea detalle
+		OrdenDetail detail = new OrdenDetail(); // ticket
+		// se da valor a las vbles
+		detail.setAmmount(ammount); // cantidad de cada producto
+		detail.setPrice(product.getPrice());
+		detail.setName(product.getName());
+		detail.setTotal(product.getPrice() * ammount); // cantidad total productos iguales
+		detail.setProduct(product);
+
+		// añade detalle al pedido (orden)
+		ordenDetail.add(detail);
+
+		double subtotal;
+		// cada elemento del ticket se devuelve como doubleStream después de obtener el
+		// total y sumarlo
+		subtotal = ordenDetail.stream().mapToDouble(dt -> dt.getTotal()).sum();
+
+		order.setTotal(subtotal);
+
+		// pintar en la vista
+		model.addAttribute("cart", ordenDetail);
+		model.addAttribute("order", order);
 		return "user/cart";
 	}
 }
