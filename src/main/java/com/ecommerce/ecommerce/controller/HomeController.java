@@ -70,12 +70,40 @@ public class HomeController {
 		detail.setProduct(product);
 
 		// añade detalle al pedido (orden)
-		ordenDetail.add(detail);
+		this.ordenDetail.add(detail);
 
-		double subtotal;
 		// cada elemento del ticket se devuelve como doubleStream después de obtener el
 		// total y sumarlo
-		subtotal = ordenDetail.stream().mapToDouble(dt -> dt.getTotal()).sum();
+		double subtotal = ordenDetail.stream().mapToDouble(dt -> dt.getTotal()).sum();
+
+		order.setTotal(subtotal);
+
+		// pintar en la vista
+		model.addAttribute("cart", ordenDetail);
+		model.addAttribute("order", order);
+		return "user/cart";
+	}
+
+	// borrar producto carrito
+	@GetMapping("/delete/cart/{id}")
+	public String deteleProductCart(@PathVariable Integer id, Model model) {
+		// lista nueva productos
+		List<OrdenDetail> orderToUpdate = new ArrayList<OrdenDetail>();
+		// borrar producto lista original
+		// recorre la lista original y cada elemento lo guarda en detail
+		for (OrdenDetail detail : ordenDetail) {
+			if (detail.getProduct().getId() != id) { // si el producto es ! del que se quiere borrar
+				orderToUpdate.add(detail); // se añade a la lista nueva
+			}
+		}
+//		this.ordenDetail.stream()
+//			.filter(detail -> detail.getProduct().getId() != id)
+//			.map(detail -> orderToUpdate.add(detail));
+
+		// lista actualizada
+		ordenDetail = orderToUpdate;
+
+		double subtotal = ordenDetail.stream().mapToDouble(dt -> dt.getTotal()).sum();
 
 		order.setTotal(subtotal);
 
