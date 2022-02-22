@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ecommerce.ecommerce.model.Product;
@@ -37,5 +38,10 @@ public class HomeController {
 		model.addAttribute("product", product);
 		log.info("id producto enviado como parametro {}", id);
 		return "user/producthome"; // vista a la que redirecciona el endpoint
+	}
+
+	@PostMapping("/cart")
+	public String addCart() {
+		return "user/cart";
 	}
 }
