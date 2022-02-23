@@ -69,13 +69,19 @@ public class HomeController {
 		detail.setTotal(product.getPrice() * ammount); // cantidad total productos iguales
 		detail.setProduct(product);
 
+		// comprobar que no se añada dos veces
+		Integer productId = product.getId();
+		boolean exist = this.ordenDetail.stream().anyMatch(p -> p.getProduct().getId() == productId);
+		if (!exist) {
+			ordenDetail.add(detail);
+		}
+
 		// añade detalle al pedido (orden)
 		this.ordenDetail.add(detail);
 
 		// cada elemento del ticket se devuelve como doubleStream después de obtener el
 		// total y sumarlo
 		double subtotal = ordenDetail.stream().mapToDouble(dt -> dt.getTotal()).sum();
-
 		order.setTotal(subtotal);
 
 		// pintar en la vista
@@ -112,4 +118,12 @@ public class HomeController {
 		model.addAttribute("order", order);
 		return "user/cart";
 	}
+
+	@GetMapping("/getCart")
+	public String getCart(Model model) {
+		model.addAttribute("cart", ordenDetail);
+		model.addAttribute("order", order);
+		return "user/cart";
+	}
+
 }
