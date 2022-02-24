@@ -6,7 +6,7 @@ import com.ecommerce.ecommerce.model.OrdenDetail;
 import com.ecommerce.ecommerce.repository.IOrderDetailRepository;
 
 @Service
-public class OrdenDetailServiceImpl implements IOrderDetailService {
+public class OrderDetailServiceImpl implements IOrderDetailService {
 	private IOrderDetailRepository orderDetailReporsitory;
 
 	@Override

@@ -1,11 +1,10 @@
 package com.ecommerce.ecommerce.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,8 +18,10 @@ import com.ecommerce.ecommerce.model.OrdenDetail;
 import com.ecommerce.ecommerce.model.Order;
 import com.ecommerce.ecommerce.model.Product;
 import com.ecommerce.ecommerce.model.User;
-import com.ecommerce.ecommerce.repository.IUserRepository;
+import com.ecommerce.ecommerce.service.order.IOrderService;
+import com.ecommerce.ecommerce.service.orderDetail.IOrderDetailService;
 import com.ecommerce.ecommerce.service.product.IProductService;
+import com.ecommerce.ecommerce.service.user.IUserService;
 
 @Controller
 @RequestMapping("/")
@@ -28,14 +29,19 @@ public class HomeController {
 	@Autowired
 	private IProductService productService;
 
+	@Autowired
+	private IUserService userService;
+
+	@Autowired
+	private IOrderService orderService;
+	@Autowired
+	private IOrderDetailService orderDetailService;
+
 	// vable para imprimer cosas. no system
-	private final Logger log = LoggerFactory.getLogger(HomeController.class);
+	// private final Logger log = LoggerFactory.getLogger(HomeController.class);
 
 	// para almacenar los distintos detalles de los elementos del pedido
 	private List<OrdenDetail> ordenDetail = new ArrayList<OrdenDetail>();
-
-	@Autowired
-	private IUserRepository userRepository;
 
 	// almacena el pedido entero
 	Order order = new Order();
@@ -53,7 +59,7 @@ public class HomeController {
 		Optional<Product> optionalProduct = productService.get(id);
 		product = optionalProduct.get();
 		model.addAttribute("product", product);
-		log.info("id producto enviado como parametro {}", id);
+		// log.info("id producto enviado como parametro {}", id);
 		return "user/producthome"; // vista a la que redirecciona el endpoint
 	}
 
@@ -134,12 +140,30 @@ public class HomeController {
 	@GetMapping("/resumen-orden")
 	public String getResumen(Model model, Integer id) {
 
-		User user = this.userRepository.findById(1).get();
+		User user = this.userService.findById(1).get();
 		// pintar productos en la vista detalle orden
 		model.addAttribute("dt", ordenDetail);
 		model.addAttribute("order", order);
 		model.addAttribute("user", user);
 		return "user/resumenorden";
+	}
+
+	@GetMapping("/saveOrder")
+	public String saveOrder() {
+		// user dueño del pedido
+		User user = this.userService.findById(1).get();
+		Date creationDate = new Date();
+		order.setCreationDate(creationDate);
+		order.setNumber(orderService.generateOrderNumber());
+		order.setUser(user);
+		this.orderService.save(order);
+
+		// guardar detalle
+		this.ordenDetail.stream().map(dt -> this.orderDetailService.save(dt));
+		// limpiar lista y orden
+		order = new Order();
+		ordenDetail.clear();
+		return "redirect:/";
 	}
 
 }
