@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.ecommerce.ecommerce.model.OrdenDetail;
 import com.ecommerce.ecommerce.model.Order;
 import com.ecommerce.ecommerce.model.Product;
+import com.ecommerce.ecommerce.model.User;
+import com.ecommerce.ecommerce.repository.IUserRepository;
 import com.ecommerce.ecommerce.service.ProductService;
 
 @Controller
@@ -31,6 +33,9 @@ public class HomeController {
 
 	// para almacenar los distintos detalles de los elementos del pedido
 	private List<OrdenDetail> ordenDetail = new ArrayList<OrdenDetail>();
+
+	@Autowired
+	private IUserRepository userRepository;
 
 	// almacena el pedido entero
 	Order order = new Order();
@@ -77,7 +82,7 @@ public class HomeController {
 		}
 
 		// añade detalle al pedido (orden)
-		this.ordenDetail.add(detail);
+		// this.ordenDetail.add(detail);
 
 		// cada elemento del ticket se devuelve como doubleStream después de obtener el
 		// total y sumarlo
@@ -114,7 +119,7 @@ public class HomeController {
 		order.setTotal(subtotal);
 
 		// pintar en la vista
-		model.addAttribute("cart", ordenDetail);
+		model.addAttribute("dt", ordenDetail);
 		model.addAttribute("order", order);
 		return "user/cart";
 	}
@@ -124,6 +129,17 @@ public class HomeController {
 		model.addAttribute("cart", ordenDetail);
 		model.addAttribute("order", order);
 		return "user/cart";
+	}
+
+	@GetMapping("/resumen-orden")
+	public String getResumen(Model model, Integer id) {
+
+		User user = this.userRepository.findById(1).get();
+		// pintar productos en la vista detalle orden
+		model.addAttribute("dt", ordenDetail);
+		model.addAttribute("order", order);
+		model.addAttribute("user", user);
+		return "user/resumenorden";
 	}
 
 }
