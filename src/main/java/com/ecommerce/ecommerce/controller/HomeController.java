@@ -20,13 +20,13 @@ import com.ecommerce.ecommerce.model.Order;
 import com.ecommerce.ecommerce.model.Product;
 import com.ecommerce.ecommerce.model.User;
 import com.ecommerce.ecommerce.repository.IUserRepository;
-import com.ecommerce.ecommerce.service.ProductService;
+import com.ecommerce.ecommerce.service.product.IProductService;
 
 @Controller
 @RequestMapping("/")
 public class HomeController {
 	@Autowired
-	private ProductService productService;
+	private IProductService productService;
 
 	// vable para imprimer cosas. no system
 	private final Logger log = LoggerFactory.getLogger(HomeController.class);

@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ecommerce.ecommerce.model.Product;
-import com.ecommerce.ecommerce.service.ProductService;
-import com.ecommerce.ecommerce.service.UploadFileService;
+import com.ecommerce.ecommerce.service.product.IProductService;
+import com.ecommerce.ecommerce.service.product.UploadFileService;
 
 @Controller
 @RequestMapping("/products")
@@ -26,7 +26,7 @@ public class ProductController {
 	private final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
 
 	@Autowired
-	private ProductService productService;
+	private IProductService productService;
 
 	// @Autowired
 	// private IUserService userService;
