@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -139,9 +141,9 @@ public class HomeController {
 	}
 
 	@GetMapping("/resumen-orden")
-	public String getResumen(Model model, Integer id) {
-
-		User user = this.userService.findById(1).get();
+	public String getResumen(Model model, HttpSession session) {
+		// obtiene el id del usuario logado y lo parse a string
+		User user = this.userService.findById(Integer.parseInt(session.getAttribute("userId").toString())).get();
 		// pintar productos en la vista detalle orden
 		model.addAttribute("dt", ordenDetail);
 		model.addAttribute("order", order);
@@ -150,9 +152,9 @@ public class HomeController {
 	}
 
 	@GetMapping("/saveOrder")
-	public String saveOrder() {
+	public String saveOrder(HttpSession session) {
 		// user dueño del pedido
-		User user = this.userService.findById(1).get();
+		User user = this.userService.findById(Integer.parseInt(session.getAttribute("userId").toString())).get();
 		Date creationDate = new Date();
 		order.setCreationDate(creationDate);
 		order.setNumber(orderService.generateOrderNumber());

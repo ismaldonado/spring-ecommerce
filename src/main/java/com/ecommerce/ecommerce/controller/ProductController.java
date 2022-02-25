@@ -3,6 +3,8 @@ package com.ecommerce.ecommerce.controller;
 import java.io.IOException;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ecommerce.ecommerce.model.Product;
+import com.ecommerce.ecommerce.model.User;
 import com.ecommerce.ecommerce.service.product.IProductService;
 import com.ecommerce.ecommerce.service.product.UploadFileService;
+import com.ecommerce.ecommerce.service.user.IUserService;
 
 @Controller
 @RequestMapping("/products")
@@ -27,6 +31,9 @@ public class ProductController {
 
 	@Autowired
 	private IProductService productService;
+
+	@Autowired
+	private IUserService userService;
 
 	// @Autowired
 	// private IUserService userService;
@@ -46,12 +53,11 @@ public class ProductController {
 	}
 
 	@PostMapping("/save")
-	public String save(Product product, @RequestParam("img") MultipartFile file) throws IOException {
-		LOGGER.info("Este es el objeto Product {}", product);
-
-		// User u =
-		// userService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
-		// Product.setUser(u);
+	public String save(Product product, @RequestParam("img") MultipartFile file, HttpSession session)
+			throws IOException {
+		// LOGGER.info("Este es el objeto Product {}", product);
+		User user = this.userService.findById(Integer.parseInt(session.getAttribute("userId").toString())).get();
+		product.setUser(user);
 
 		// imagen
 		if (product.getId() == null) { // cuando se crea un Product
