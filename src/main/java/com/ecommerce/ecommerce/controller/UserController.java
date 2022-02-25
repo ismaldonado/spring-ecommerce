@@ -1,5 +1,9 @@
 package com.ecommerce.ecommerce.controller;
 
+import java.util.Optional;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,15 +19,34 @@ public class UserController {
 	@Autowired
 	private IUserService userService;
 
-	@GetMapping("/login")
+	@GetMapping("/register")
 	public String create() {
-		return "user/login";
+		return "user/register";
 	}
 
 	@PostMapping("/save")
 	public String save(User user) {
 		user.setType("user");
 		this.userService.save(user);
+		return "redirect:/";
+	}
+
+	@GetMapping("/login")
+	public String login() {
+		return "user/login";
+	}
+
+	@PostMapping("/access")
+	public String access(User user, HttpSession session) {
+		Optional<User> userAccess = this.userService.findByEmail(user.getEmail());
+		if (userAccess.isPresent()) {
+			session.setAttribute("userId", userAccess.get().getId());
+			if (userAccess.get().getType().equals("ADMIN")) {
+				return "redirect:/admin";
+			} else {
+				return "redirect:/";
+			}
+		}
 		return "redirect:/";
 	}
 }

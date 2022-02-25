@@ -10,4 +10,6 @@ public interface IUserService {
 
 	User save(User user);
 
+	Optional<User> findByEmail(String email);
+
 }
