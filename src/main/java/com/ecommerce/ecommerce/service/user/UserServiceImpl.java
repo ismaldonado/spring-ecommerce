@@ -18,4 +18,9 @@ public class UserServiceImpl implements IUserService {
 		return this.iuserRepository.findById(id);
 
 	}
+
+	@Override
+	public User save(User user) {
+		return this.iuserRepository.save(user);
+	}
 }
